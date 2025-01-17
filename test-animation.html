@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konva Editable Line with Control Points</title>
+    <script src="https://cdn.jsdelivr.net/npm/konva@8.3.5/konva.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        background: #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      const stage = new Konva.Stage({
+        container: "container",
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+
+      const layer = new Konva.Layer()
+      stage.add(layer)
+
+      const line1 = new Konva.Line({
+        points: [1000, 200, 1000, 478, 958, 478, 709, 478, 317, 478, 150, 478, 150, 200], // 自定义管道的线条点
+        stroke: "blue",
+        strokeWidth: 11,
+        lineCap: "round",
+        lineJoin: "round",
+        tension: 0
+      })
+
+      const line2 = new Konva.Line({
+        points: [1000, 200, 1000, 478, 958, 478, 709, 478, 317, 478, 150, 478, 150, 200],
+        stroke: "red",
+        strokeWidth: 5,
+        lineCap: "round",
+        lineJoin: "round",
+        dash: [25, 25],
+        tension: 0,
+        fill: "none"
+      })
+      line2.on("click", (e) => {
+        console.log(e)
+      })
+      line2.on("mouseover", (e) => {
+        document.body.style.cursor = "pointer"
+      })
+      line2.on("mouseout", (e) => {
+        document.body.style.cursor = "default"
+      })
+
+      // 创建一个图像对象
+      const image1 = new Image()
+      image1.onload = () => {
+        const konvaImage = new Konva.Image({
+          x: 100, // x 坐标
+          y: 100, // y 坐标
+          image: image1,
+          width: 100, // 图像宽度
+          height: 100 // 图像高度
+        })
+
+        const konvaImage1 = new Konva.Image({
+          x: 950, // x 坐标
+          y: 100, // y 坐标
+          image: image1,
+          width: 100, // 图像宽度
+          height: 100 // 图像高度
+        })
+
+        layer.add(konvaImage) // 将图像添加到图层
+        // layer.add(konvaImage1) // 将图像添加到图层
+        layer.draw() // 渲染图层
+      }
+
+      // 设置图像源
+      image1.src = "https://via.placeholder.com/100x100" // 替换为你的图片 URL
+
+      const group = new Konva.Group({
+        x: 950,
+        y: 100,
+        // width: 100,
+        // height: 100,
+        stroke: "rgba(68, 83, 109, 1)",
+        strokeWidth: 5
+        // rotation: 20,
+      })
+
+      const colors = ["red", "orange", "yellow"]
+
+      const drawFan = (layer, spinning) => {
+        const path1 = new Konva.Path({
+          // x: 0,
+          // y: 0,
+          data: "m180.6,90.8c0,49.6 -40.2,89.8 -89.8,89.8s-89.8,-40.2 -89.8,-89.8s40.2,-89.8 89.8,-89.8s89.8,40.2 89.8,89.8z",
+          stroke: "rgba(68, 83, 109, 1)",
+          strokeWidth: 5,
+          fill: "white"
+          // scaleX: 100 / 184,
+          // scaleY: 100 / 184
+        })
+
+        const path2 = new Konva.Path({
+          // x: 0,
+          // y: 0,
+          data: "m161.3,98.2l-0.4,0l-39.8,-1.2c-0.9,5.2 -3.2,9.9 -6.3,13.9l24.3,21l0,0l6,5.2c-0.8,0.9 -1.6,1.9 -2.5,2.8c-0.1,0.1 -0.3,0.3 -0.4,0.4c-0.7,0.7 -1.5,1.5 -2.1,2.1c-0.5,0.4 -0.9,0.9 -1.5,1.3c-0.4,0.4 -0.8,0.7 -1.2,1.1c-0.5,0.5 -1.2,0.9 -1.7,1.5c-12.5,9.9 -28.1,15.8 -45.3,15.8l-0.1,0.1c-1.3,0 -2.7,-0.1 -4.2,-0.1l0,-39.8c-5.4,-0.8 -10.3,-2.9 -14.5,-6c0.1,0.1 0.3,0.3 0.3,0.3l-7.6,8.3l-20.2,22c-3.9,-3.5 -7.2,-7.5 -10.3,-11.8l0,0c-8.7,-12.3 -13.5,-27.5 -13.1,-43.7l0,-0.1c0,-1.3 0.1,-2.7 0.3,-4.2l0.4,0l38.3,1.1c0.7,-7 3.6,-13.1 8,-18.1l-23,-19.7l0,0l-7,-6c0.8,-0.9 1.6,-1.7 2.4,-2.7c0.5,-0.5 1.2,-1.2 1.7,-1.7c0.3,-0.3 0.4,-0.4 0.7,-0.7c1.6,-1.6 3.3,-3.1 5.2,-4.4c12.3,-9.6 27.9,-15.4 44.8,-15.4l0.1,0c1.3,0 2.7,0 4.2,0.1l0,41.2c5.5,1.1 10.5,3.6 14.5,7.2l6.3,-6.8l0,0l20.9,-22.6c0.8,0.8 1.6,1.6 2.4,2.4c0.3,0.3 0.5,0.7 0.8,0.9c0.5,0.5 0.9,1.1 1.5,1.6c0.3,0.4 0.7,0.8 1.1,1.1c0.4,0.4 0.8,0.9 1.2,1.3c0.4,0.4 0.7,0.8 1.1,1.2c10,12.9 15.9,29.2 15.4,46.9c0,0 -0.2,3.1 -0.7,4.2z",
+          stroke: "rgba(68, 83, 109, 1)",
+          strokeWidth: 5,
+          rotation: 0
+        })
+
+        const rect1 = new Konva.Rect({
+          // x: 0,
+          // y: 0,
+          width: 100,
+          height: 100,
+          fill: "white",
+          stroke: "black",
+          strokeWidth: 0
+        })
+
+        // group.add(rect1)
+        group.add(path1)
+        group.add(path2)
+        // 找到图形的中心点
+        const boundingBox = group.getClientRect()
+        const centerX = boundingBox.width / 2
+        const centerY = boundingBox.height / 2
+        // 重新设置中心点
+        path1.position({ x: centerX, y: centerY })
+        path2.position({ x: centerX, y: centerY })
+        path1.offset({ x: centerX, y: centerY })
+        path2.offset({ x: centerX, y: centerY })
+        rect1.width(boundingBox.width)
+        rect1.height(boundingBox.height)
+        // console.log({ centerX, centerY })
+        // 将组缩放至目标尺寸
+        group.scale({ x: 100 / boundingBox.width, y: 100 / boundingBox.height })
+        console.log("group.getClientRect", path1.getClientRect(), path2.getClientRect(), group.getClientRect())
+        let rotation = 0
+        let speed = 1
+
+        const anim = new Konva.Animation(() => {
+          rotation += speed // 增加偏移量
+
+          // 设置虚线的偏移量，使用模运算确保循环
+          path2.rotation(rotation)
+          // if (dashOffset === dashLength) dashOffset = 0
+
+          layer.batchDraw() // Batch draw the layer
+        }, layer)
+
+        if (spinning) {
+          anim.start()
+        } else {
+          anim.stop()
+        }
+
+        layer.add(group)
+      }
+
+      layer.add(line1)
+      layer.add(line2)
+      // layer.add(image1)
+      drawFan(layer, true)
+
+      console.log("line2", line2.dash())
+
+      let dashOffset = 0 // Initial dash offset
+      let speed = 0.5 // Initial speed
+      const dashLength = line2.dash().reduce((p, c) => p + c, 0)
+
+      const anim = new Konva.Animation(() => {
+        dashOffset += speed // 增加偏移量
+
+        // 设置虚线的偏移量，使用模运算确保循环
+        line2.dashOffset(dashOffset)
+        if (dashOffset === dashLength) dashOffset = 0
+
+        layer.batchDraw() // Batch draw the layer
+      }, layer)
+
+      // Start the animation
+      anim.start()
+      // Render the layer
+      layer.draw()
+    </script>
+  </body>
+</html>

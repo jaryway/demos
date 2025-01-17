@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konva Path Rotation Example</title>
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+
+      #container {
+        border: 1px solid #ccc;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container"></div>
+    <script>
+      // 创建舞台和图层
+      const stage = new Konva.Stage({
+        container: "container", // 容器 ID
+        width: 600,
+        height: 600
+      })
+
+      const layer = new Konva.Layer()
+      stage.add(layer)
+
+      const width = 263
+      const height = 163
+      const w = width / 2
+      const h = (w * height) / width
+
+      // 创建不规则路径
+      const path = new Konva.Path({
+        data: "M216.41 57.006C216.961 54.084 217.249 51.069 217.249 47.986C217.249 21.4841 195.972 0 169.725 0C153.666 0 139.467 8.043 130.865 20.3575C122.606 13.3566 111.954 9.1402 100.327 9.1402C74.3322 9.1402 53.2123 30.2136 52.8094 56.364H52.8035C23.6407 56.364 0 80.235 0 109.682C0 139.129 23.6407 163 52.8035 163H208.197C237.359 163 261 139.129 261 109.682C261 83.056 241.672 60.99 216.41 57.006Z",
+        fill: "blue",
+        stroke: "black",
+        strokeWidth: 2,
+        width: 1000,
+        height: h,
+        offsetX: w / 2,
+        offsetY: h / 2,
+        x: w / 2,
+        y: h / 2
+      })
+
+      const line = new Konva.Line({
+        points: [15, -10, 0, 0, 15, 10],
+        strokeWidth: 5,
+        lineCap: "round",
+        lineJoin: "round",
+        stroke: "block",
+        fill: "block",
+        opacity: 1,
+        hideInExport: false
+      })
+
+      const rect = new Konva.Rect({
+        width: w,
+        height: h,
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 5,
+        offsetX: w / 2,
+        offsetY: h / 2,
+        x: w / 2,
+        y: h / 2
+      })
+
+      // 将路径添加到图层
+      // layer.add(path);
+      layer.draw()
+
+      const anim = new Konva.Animation(() => {
+        // path.rotation(path.rotation() + 1) // 每帧增加1度
+        // rect.rotation(rect.rotation() + 1) // 每帧增加1度
+        // console.log("rotation", path.x(), path.y())
+      }, layer)
+      anim.start()
+
+      // 获取路径的边界框
+      // const bbox = path.getClientRect();
+
+      // 计算中心点
+      // const centerX = bbox.x + bbox.width / 2;
+      // const centerY = bbox.y + bbox.height / 2;
+
+      // 创建分组并设置位置
+      const group = new Konva.Group({
+        x: (600 - w) / 2, // 设置分组中心点 X 坐标
+        y: (600 - h) / 2, // 设置分组中心点 Y 坐标
+        draggable: true // 可拖动
+      })
+
+      // 设置分组的 offset
+      // group.offsetX(bbox.width / 2);
+      // group.offsetY(bbox.height / 2);
+
+      // 将路径添加到分组
+      const bbox = path.getClientRect()
+      console.log(bbox)
+
+      const group2 = new Konva.Group({
+        x: 0,
+        y: 0,
+        rotation: 180
+      })
+      group2.add(line)
+
+      // rect.offsetX(bbox.width / 2)
+      // rect.offsetY(bbox.height / 2)
+      // path.offsetX(84 / 2)
+      // path.offsetY(84 / 2)
+      group.add(path)
+      group.add(rect)
+      group.add(group2)
+
+      layer.add(group)
+      layer.draw()
+
+      // 旋转分组
+      // group.rotation(45); // 旋转 45 度
+
+      // 监听鼠标事件以旋转分组
+      // group.on('click', () => {
+      //   group.rotation(group.rotation() + 15); // 每次点击旋转 15 度
+      //   layer.batchDraw(); // 更新图层
+      // });
+    </script>
+  </body>
+</html>

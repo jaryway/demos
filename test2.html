@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <svg
+      viewBox="0 0 1024 1024"
+      version="1.1"
+      width="200"
+      height="200"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:svg="http://www.w3.org/2000/svg"
+    >
+      <path id="path1" d="M 0,0 V 1024 H 1024 V 0 Z" fill="currentColor" />
+    </svg>
+
+    <svg
+      viewBox="0 0 1024 1024"
+      version="1.1"
+      width="200"
+      height="200"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:svg="http://www.w3.org/2000/svg"
+    >
+      <!-- <path id="path1" d="M 0,0 V 1024 H 1024 V 0 Z" fill="currentColor" /> -->
+      <path id="path1" d="M 0,0 L 1024,0 V 1024 H 0 Z" fill="currentColor" />
+
+      <circle cx="0" cy="0" r="50" fill="red">
+        <text>0</text>
+      </circle>
+      <circle cx="1024" cy="0" r="50" fill="gray">
+        <text>3</text>
+      </circle>
+      <circle cx="0" cy="1024" r="50" fill="blue">
+        <text>1</text>
+      </circle>
+      <circle cx="1024" cy="1024" r="50" fill="yellow">
+        <text>2</text>
+      </circle>
+    </svg>
+    <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 50,150 Q 100,50 150,150 T 250,150" fill="none" stroke="red" stroke-width="2"></path>
+      <path
+        d="M 50,150 Q 100,50 150,150 T 250,150"
+        fill="none"
+        stroke="black"
+        stroke-width="2"
+        stroke-dasharray="30"
+        stroke-dashoffset="300"
+      >
+        <!-- 初始偏移量 -->
+        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="3s" repeatCount="indefinite" />
+      </path>
+    </svg>
+    <canvas id="canvas" width="300" height="300"></canvas>
+
+    <script>
+      const canvas = document.getElementById("canvas")
+      const ctx = canvas.getContext("2d")
+
+      // 绘制红色路径
+      ctx.beginPath()
+      ctx.moveTo(50, 150)
+      ctx.quadraticCurveTo(100, 50, 150, 150)
+      ctx.quadraticCurveTo(200, 250, 250, 150)
+      
+      ctx.strokeStyle = "red"
+      ctx.lineWidth = 2
+      ctx.stroke()
+
+      // 绘制黑色路径（带动画效果）
+      const pathLength = 300 // 自定义路径长度
+      const dashArray = [30]
+      const duration = 3000
+      const per = pathLength / duration
+      let dashOffset = pathLength
+      let timestamp = 0
+
+      function animate(t) {
+        const tt = t || 0
+        const elapsed = tt - timestamp
+        dashOffset -= (pathLength / duration) * elapsed
+        timestamp = tt
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height) // 清空画布
+        // 绘制红色路径
+        ctx.beginPath()
+        ctx.moveTo(50, 150)
+        ctx.quadraticCurveTo(100, 50, 150, 150)
+        ctx.quadraticCurveTo(200, 250, 250, 150)
+        ctx.strokeStyle = "red"
+        ctx.lineWidth = 2
+        ctx.setLineDash([])
+        ctx.stroke()
+
+        // 绘制黑色路径
+        ctx.beginPath()
+        ctx.moveTo(50, 150)
+        ctx.quadraticCurveTo(100, 50, 150, 150)
+        ctx.quadraticCurveTo(200, 250, 250, 150)
+        ctx.lineDashOffset = dashOffset
+        ctx.strokeStyle = "green"
+        ctx.lineWidth = 2
+        ctx.setLineDash(dashArray)
+        ctx.shadowColor = "rgba(0, 255, 0, 0.8)" // 发光颜色
+        ctx.shadowBlur = 20 // 模糊程度
+        ctx.stroke()
+
+        if (dashOffset < 0) {
+          dashOffset = pathLength // 重置偏移量
+        }
+
+        requestAnimationFrame(animate) // 循环动画
+      }
+
+      animate() // 启动动画
+    </script>
+  </body>
+</html>
